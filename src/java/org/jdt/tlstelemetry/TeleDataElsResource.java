@@ -8,11 +8,15 @@ package org.jdt.tlstelemetry;
 
 
 import com.google.gson.Gson;
+import java.security.SecureRandom;
 import org.jdt.TDObject;
 import java.security.cert.Certificate;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.POST;
@@ -32,6 +36,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
+import java.util.Random;
 
 /**
  * REST Web Service
@@ -72,6 +77,22 @@ public class TeleDataElsResource {
 	public Response postJson(String content) {
 		Gson gson = new Gson();
 		TDObject obj = gson.fromJson(content, TDObject.class);
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("TLSTelemetryServerPU");
+                EntityManager em = emf.createEntityManager();
+		TDBackingStore td = new TDBackingStore();
+		
+		// Replace with better ID generator later
+		SecureRandom rnd = new SecureRandom();
+		td.setId(rnd.nextLong());
+		td.setCipherSuite(obj.getCipher());
+		td.setProtocol(obj.getProtocol());
+		for(byte[] certdata : obj.getCertData())
+		{
+			td.addCertData(certdata);
+		}
+		em.getTransaction().begin();
+		em.persist(td);
+		em.getTransaction().commit();
 
 		return Response.created(context.getAbsolutePath()).build();
 	}
