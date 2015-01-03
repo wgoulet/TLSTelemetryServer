@@ -1,0 +1,95 @@
+18a19,22
+> import com.google.gson.Gson;
+> import org.jdt.TDObject;
+> import java.security.cert.Certificate;
+> import java.io.DataOutputStream;
+20a25,32
+> import java.net.HttpURLConnection;
+> import org.apache.http.StatusLine;
+> import org.apache.http.impl.client.HttpClients;
+> import org.apache.http.HttpResponse;
+> import org.apache.http.client.HttpClient;
+> import org.apache.http.impl.client.CloseableHttpClient;
+> import org.apache.http.entity.StringEntity;
+> import org.apache.http.client.methods.HttpPost;
+25a38,40
+> import java.nio.file.Files;
+> import java.nio.file.Paths;
+> import java.nio.file.StandardOpenOption;
+27a43
+> import javax.net.ssl.SSLSession;
+30a47,54
+> import org.apache.http.Header;
+> import org.apache.http.HttpHost;
+> import org.apache.http.HttpRequest;
+> import org.apache.http.client.ClientProtocolException;
+> import org.apache.http.client.methods.CloseableHttpResponse;
+> import org.apache.http.conn.ClientConnectionManager;
+> import org.apache.http.params.HttpParams;
+> import org.apache.http.protocol.HttpContext;
+153a178,182
+> 	    try {
+> 					Files.write(Paths.get("/home/wgoulet/tlog"), "SSL connection handled by SecNioChannel\n".getBytes(), StandardOpenOption.APPEND);
+> 				} catch (Exception e) {
+> 					throw e;				
+> 				}
+168a198,205
+> 		    try{
+> 			    submitTelemetryData(sslEngine.getSession());
+> 		    }
+> 		    catch(Exception e)
+> 		    {
+> 			    throw new IOException("Failure");
+> 		    }
+> 
+212a250
+> 	
+215a254,295
+> 	void submitTelemetryData(SSLSession se) throws Exception {
+> 		try {
+> 			// Submit session to TLSTelemetry Server
+> 			Files.write(Paths.get("/home/wgoulet/tlog"), "Preparing to submit telemetric data\n".getBytes(), StandardOpenOption.APPEND);
+> 			Gson gson = new Gson();
+> 			Files.write(Paths.get("/home/wgoulet/tlog"), "Created serializer\n".getBytes(), StandardOpenOption.APPEND);
+> 			TDObject td = new TDObject();
+> 			td.setCipher(se.getCipherSuite());
+>                         for(Certificate c : se.getLocalCertificates())
+>                         {
+>                             td.addCert(c.getEncoded());
+>                         }
+> 			td.setProtocol(se.getProtocol());
+> 			String tdstr = gson.toJson(td);
+> 			Files.write(Paths.get("/home/wgoulet/tlog"), tdstr.getBytes(), StandardOpenOption.APPEND);
+> 
+> 			
+> 			CloseableHttpClient httpClient = HttpClients.createDefault();
+> 
+> 			HttpPost pst = new HttpPost("http://localhost:8084/TLSTelemetryServer/webresources/tde");
+> 			pst.addHeader("content-type", "application/json; charset=utf-8");
+> 			StringEntity ent = new StringEntity(tdstr);
+> 			ent.setContentType("application/json");
+> 			pst.setEntity(ent);
+> 			HttpResponse rsp = httpClient.execute(pst);
+> 			
+> 			
+> 
+> 			Files.write(Paths.get("/home/wgoulet/tlog"), "Generated telemetric data header\n".getBytes(), StandardOpenOption.APPEND);
+> 			
+> 			StatusLine sl = rsp.getStatusLine();
+> 			int rp = sl.getStatusCode();
+> 			if (rp == 201) {
+> 				Files.write(Paths.get("/home/wgoulet/tlog"), "Submitted telemetric data\n".getBytes(), StandardOpenOption.APPEND);
+> 			} else {
+> 				Files.write(Paths.get("/home/wgoulet/tlog"), "Failed to submit SSL Context\n".getBytes(), StandardOpenOption.APPEND);
+> 			}
+> 		} catch (Exception ex) {
+> 			throw ex;
+> 		}
+> 	}
+> 
+572c652,653
+< }
+\ No newline at end of file
+---
+>     
+> }
