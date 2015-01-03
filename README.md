@@ -15,7 +15,7 @@ Architecture
 
 The TLSTelemetryServer consists of a server application that accepts TLS telemetry data via REST service call and a patched version of Tomcat8 that implements a TLS telemetry data client. The client creates a TDObject that is initialized with data extracted from a javax.net.ssl.SSLSession object that is created by Tomcat during TLS handshakes.
 
-The TLSTelemetryServer server application is implemented as a standard Java web application with 1 REST endpoint (/tde) and a jsp page that implments the view. The Java persistance API (JPA) is used to store received TDObjects and make the objects available to the viewer, using a PostgreSQL backend.
+The TLSTelemetryServer server application is implemented as a standard Java web application with 1 REST endpoint (/tde) and a jsp page that implements the view. The Java persistance API (JPA) is used to store received TDObjects and make the objects available to the viewer, using a PostgreSQL backend.
 
 The TLSTelemetryServer client modifications for Tomcat are applied to the SecureNioChannel class. 
 
