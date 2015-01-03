@@ -13,5 +13,7 @@
 	</head>
 	<body>
 		<h1>Hello World!</h1>
+		<jsp:useBean id="tdviewer" scope="session" class="org.jdt.tlstelemetry.TDViewProvider" />
+		${tdviewer.TDRecord}
 	</body>
 </html>
