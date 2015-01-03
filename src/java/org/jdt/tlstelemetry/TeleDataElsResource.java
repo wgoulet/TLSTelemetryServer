@@ -56,17 +56,6 @@ public class TeleDataElsResource {
 	}
 
 	/**
-	 * Retrieves representation of an instance of org.jdt.tlstelemetry.TeleDataElsResource
-	 * @return an instance of java.lang.String
-	 */
-	@GET
-        @Produces("application/json")
-	public String getJson() {
-		//TODO return proper representation object
-		throw new UnsupportedOperationException();
-	}
-
-	/**
 	 * POST method for creating an instance of TeleDataResource
 	 * @param content representation for the new resource
 	 * @return an HTTP response with content of the created resource
@@ -97,11 +86,4 @@ public class TeleDataElsResource {
 		return Response.created(context.getAbsolutePath()).build();
 	}
 
-	/**
-	 * Sub-resource locator method for {id}
-	 */
-	@Path("{id}")
-	public TeleDataResource getTeleDataResource(@PathParam("id") String id) {
-		return TeleDataResource.getInstance(id);
-	}
 }

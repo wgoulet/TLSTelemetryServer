@@ -31,7 +31,6 @@ public class ApplicationConfig extends Application {
 	 */
 	private void addRestResourceClasses(Set<Class<?>> resources) {
 		resources.add(org.jdt.tlstelemetry.TeleDataElsResource.class);
-		resources.add(org.jdt.tlstelemetry.TeleDataResource.class);
 	}
 	
 }
