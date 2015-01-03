@@ -12,6 +12,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -23,11 +24,50 @@ import javax.persistence.Query;
  */
 public class TDViewProvider {
 	private String tdrecord;
+	private Vector<TDViewRecord> tdelements;
+
 
 	public TDViewProvider()
 	{
 		tdrecord = new String("InitialTest");
+		tdelements = new Vector<TDViewRecord>();
 	}
+
+	public Vector<TDViewRecord> getTDelements()
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("TLSTelemetryServerPU");
+                EntityManager em = emf.createEntityManager();
+		Query qry = em.createNativeQuery("select * from tdbackingstore",TDBackingStore.class);
+	
+		List<TDBackingStore> results = qry.getResultList();
+
+		for(TDBackingStore td : results)
+		{
+			TDViewRecord rec = new TDViewRecord();
+			rec.setCipherSuite(td.getCipherSuite());
+			rec.setProtocol(td.getProtocol());
+			try{
+				for(byte[] certdata : td.getCertData())
+				{
+					CertificateFactory fc = CertificateFactory.getInstance("X509");
+					ByteArrayInputStream io = new ByteArrayInputStream(certdata);
+					X509Certificate cert = (X509Certificate)fc.generateCertificate(io);
+					rec.setIssuer(cert.getIssuerDN().toString());
+					rec.setSubject(cert.getSubjectDN().toString());
+					rec.setSigalg(cert.getSigAlgName());
+				}
+			}
+			catch(Exception e)
+			{
+				tdrecord = "Error";
+			}
+			tdelements.add(rec);
+			
+		}
+
+		return tdelements;
+	}
+		
 
 	public void setTDRecord(String s)
 	{

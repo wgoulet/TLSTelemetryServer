@@ -4,6 +4,7 @@
     Author     : wgoulet
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +15,17 @@
 	<body>
 		<h1>Hello World!</h1>
 		<jsp:useBean id="tdviewer" scope="session" class="org.jdt.tlstelemetry.TDViewProvider" />
-		${tdviewer.TDRecord}
+		<c:forEach items="${tdviewer.TDelements}" var="element">
+			CipherSuite: ${element.cipherSuite}
+			<br>
+			Protocol: ${element.protocol}
+			<br>
+			Subject: ${element.subject}
+			<br>
+			Issuer: ${element.issuer}
+			<br>
+			SigAlg: ${element.sigalg}
+			<br>
+		</c:forEach>
 	</body>
 </html>
