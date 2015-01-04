@@ -24,15 +24,24 @@ The Google JSON serialization library (https://code.google.com/p/google-gson/) i
 Installation
 ------------
 
+Pre-requisites:
+The Oracle JRE must be installed and configured as the JRE for use by Tomcat. The standard OpenJDK packages don't include an implementation of the java.security.cert package which is needed to parse certificate data.
+
+Download the JRE from http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html. The server has been tested with JRE 7u71 x64.
+
 TLSTelemetryServer
 - Deploy the TLSTelemetryServer.war file to a Tomcat7 or greater application server.
+- (For standard Ubuntu tomcat7 package) Edit /etc/default/tomcat7 to change JAVA_HOME to point to the Oracle JRE installation directory.
 - Install PostgreSQL 9.3 or greater. Create a user account for use by the application and a database 'tlstsdb'.
 - Update the persistence.xml file to point to the PostgreSQL instance created above and set the DB credentials.
 
 TLSTelemetryServer Client Tomcat modifications
+- Create the logfile used by the telemetry file (hardcoded path for now)
+  touch /home/wgoulet/tlog
 - Download the Tomcat 8 server source code from http://svn.apache.org/repos/asf/tomcat/tc8.0.x/trunk/
 - Patch the ./java/org/apache/tomcat/util/net/SecureNioChannel.java with the patchfile from the wgoulet/TLSTelemetryServer/SecureNioChannel.patch
 - Build the Tomcat server per standard build instructions.
+- Create a setenv.sh file in the Tomcat bin directory and add a JAVA_HOME entry that points to the Oracle JRE installation directory.
 - Deploy modified Tomcat server on target system and deploy any web applications as desired.
 - Configure the TLS listener in the Tomcat server.xml file
 
