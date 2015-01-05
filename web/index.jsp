@@ -13,19 +13,39 @@
 		<title>JSP Page</title>
 	</head>
 	<body>
-		<h1>Hello World!</h1>
+		<h1>TLS Telemetry Server</h1>
 		<jsp:useBean id="tdviewer" scope="session" class="org.jdt.tlstelemetry.TDViewProvider" />
+			<table border="1">
+				<tr>
+					<td>ClientName</td>
+					<td>Ciphersuite</td>
+					<td>Protocol</td>
+					<td>Certificate Subject</td>
+					<td>Certificate Issuer</td>
+					<td>Certificate Signature Algorithm</td>
+				</tr>
 		<c:forEach items="${tdviewer.TDelements}" var="element">
-			CipherSuite: ${element.cipherSuite}
-			<br>
-			Protocol: ${element.protocol}
-			<br>
-			Subject: ${element.subject}
-			<br>
-			Issuer: ${element.issuer}
-			<br>
-			SigAlg: ${element.sigalg}
-			<br>
+			<tr>
+				<td>
+			${element.clientname}
+				</td>
+				<td>
+			${element.cipherSuite}
+				</td>
+				<td>
+			${element.protocol}
+				</td>
+				<td>
+			${element.subject}
+				</td>
+				<td>
+			${element.issuer}
+				</td>
+				<td>
+			${element.sigalg}
+				</td>
+			</tr>
 		</c:forEach>
+			</table>
 	</body>
 </html>

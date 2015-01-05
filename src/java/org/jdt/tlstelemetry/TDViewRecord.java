@@ -17,6 +17,7 @@ public class TDViewRecord {
 	private String subject;
 	private String keysize;
 	private String sigalg;
+	private String clientname;
 
 	/**
 	 * @return the cipherSuite
@@ -100,6 +101,20 @@ public class TDViewRecord {
 	 */
 	public void setSigalg(String sigalg) {
 		this.sigalg = sigalg;
+	}
+
+	/**
+	 * @return the clientname
+	 */
+	public String getClientname() {
+		return clientname;
+	}
+
+	/**
+	 * @param clientname the clientname to set
+	 */
+	public void setClientname(String clientname) {
+		this.clientname = clientname;
 	}
 
 	

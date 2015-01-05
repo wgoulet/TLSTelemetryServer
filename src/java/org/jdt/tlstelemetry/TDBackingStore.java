@@ -25,6 +25,7 @@ public class TDBackingStore implements Serializable {
 	private Long id;
 	private String ciphersuite;
 	private String protocol;
+	private String clientname;
 	private Vector<byte[]> certdata;
 
 	public TDBackingStore()
@@ -93,6 +94,20 @@ public class TDBackingStore implements Serializable {
 	@Override
 	public String toString() {
 		return "org.jdt.tlstelemetry.TDBackingStore[ id=" + id + " ]";
+	}
+
+	/**
+	 * @return the clientname
+	 */
+	public String getClientname() {
+		return clientname;
+	}
+
+	/**
+	 * @param clientname the clientname to set
+	 */
+	public void setClientname(String clientname) {
+		this.clientname = clientname;
 	}
 	
 }
