@@ -12,13 +12,15 @@
 > import org.apache.http.impl.client.CloseableHttpClient;
 > import org.apache.http.entity.StringEntity;
 > import org.apache.http.client.methods.HttpPost;
-25a38,40
+21a34
+> import java.net.Socket;
+25a39,41
 > import java.nio.file.Files;
 > import java.nio.file.Paths;
 > import java.nio.file.StandardOpenOption;
-27a43
+27a44
 > import javax.net.ssl.SSLSession;
-30a47,54
+30a48,55
 > import org.apache.http.Header;
 > import org.apache.http.HttpHost;
 > import org.apache.http.HttpRequest;
@@ -27,25 +29,29 @@
 > import org.apache.http.conn.ClientConnectionManager;
 > import org.apache.http.params.HttpParams;
 > import org.apache.http.protocol.HttpContext;
-153a178,182
+41a67
+>     protected Socket chsocket;
+55a82
+>         this.chsocket = channel.socket();
+153a181,185
 > 	    try {
 > 					Files.write(Paths.get("/home/wgoulet/tlog"), "SSL connection handled by SecNioChannel\n".getBytes(), StandardOpenOption.APPEND);
 > 				} catch (Exception e) {
 > 					throw e;				
 > 				}
-168a198,205
+168a201,208
 > 		    try{
-> 			    submitTelemetryData(sslEngine.getSession());
+> 			    submitTelemetryData(sslEngine.getSession(),chsocket);
 > 		    }
 > 		    catch(Exception e)
 > 		    {
 > 			    throw new IOException("Failure");
 > 		    }
 > 
-212a250
+212a253
 > 	
-215a254,295
-> 	void submitTelemetryData(SSLSession se) throws Exception {
+215a257,300
+> 	void submitTelemetryData(SSLSession se,Socket sock) throws Exception {
 > 		try {
 > 			// Submit session to TLSTelemetry Server
 > 			Files.write(Paths.get("/home/wgoulet/tlog"), "Preparing to submit telemetric data\n".getBytes(), StandardOpenOption.APPEND);
@@ -58,6 +64,8 @@
 >                             td.addCert(c.getEncoded());
 >                         }
 > 			td.setProtocol(se.getProtocol());
+>                         td.setClientaddress(sock.getLocalAddress().getHostAddress());
+>                         td.setClientport(sock.getLocalPort());
 > 			String tdstr = gson.toJson(td);
 > 			Files.write(Paths.get("/home/wgoulet/tlog"), tdstr.getBytes(), StandardOpenOption.APPEND);
 > 
@@ -87,7 +95,7 @@
 > 		}
 > 	}
 > 
-572c652,653
+572c657,658
 < }
 \ No newline at end of file
 ---

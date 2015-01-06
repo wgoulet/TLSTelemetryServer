@@ -17,7 +17,8 @@
 		<jsp:useBean id="tdviewer" scope="session" class="org.jdt.tlstelemetry.TDViewProvider" />
 			<table border="1">
 				<tr>
-					<td>ClientName</td>
+					<td>ClientAddress</td>
+					<td>ClientPort</td>
 					<td>Ciphersuite</td>
 					<td>Protocol</td>
 					<td>Certificate Subject</td>
@@ -27,7 +28,10 @@
 		<c:forEach items="${tdviewer.TDelements}" var="element">
 			<tr>
 				<td>
-			${element.clientname}
+			${element.clientaddress}
+				</td>
+				<td>
+			${element.clientport}
 				</td>
 				<td>
 			${element.cipherSuite}

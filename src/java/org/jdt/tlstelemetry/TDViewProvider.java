@@ -46,6 +46,8 @@ public class TDViewProvider {
 			TDViewRecord rec = new TDViewRecord();
 			rec.setCipherSuite(td.getCipherSuite());
 			rec.setProtocol(td.getProtocol());
+			rec.setClientaddress(td.getClientaddress());
+			rec.setClientport(td.getClientport());
 			try{
 				for(byte[] certdata : td.getCertData())
 				{

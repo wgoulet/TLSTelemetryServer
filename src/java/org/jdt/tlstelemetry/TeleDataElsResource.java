@@ -75,7 +75,8 @@ public class TeleDataElsResource {
 		td.setId(rnd.nextLong());
 		td.setCipherSuite(obj.getCipher());
 		td.setProtocol(obj.getProtocol());
-		td.setClientname(obj.getClientname());
+		td.setClientaddress(obj.getClientaddress());
+		td.setClientport(obj.getClientport());
 		for(byte[] certdata : obj.getCertData())
 		{
 			td.addCertData(certdata);
